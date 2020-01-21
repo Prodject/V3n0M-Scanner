@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# -*- coding: latin-1 -*-
+# -*- coding: UTF-8 -*-
 
 try:
     import re, random, threading, socket, urllib.request, urllib.error, urllib.parse, http.cookiejar, subprocess, \
@@ -18,6 +18,7 @@ try:
     import tty
     import inspect
     from functools import wraps
+    import toxin
 
 except Exception as verb:
     print("\n|------ PYTHON PROBLEM DETECTED! Recovery Menu Enabled -----| ")
@@ -55,10 +56,10 @@ except Exception as verb:
         print("Note: This will entirely reinstall all current installed modules aswell to clear possible problems")
         time.sleep(10)
         for dist in pip.get_installed_distributions():
-            call("pip3 install --upgrade --no-deps --force-reinstall " + dist.project_name, shell=True)
-            call("pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U",
+            call("pip3 install --upgrade --no-deps --force-reinstall --user " + dist.project_name, shell=True)
+            call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user",
                  shell=True)
-            pass
+            subprocess._cleanup()
         pass
     if chce == '2':
         sys.stdout.flush()
@@ -71,19 +72,20 @@ except Exception as verb:
             os.kill(os.getpid(), 9)
         print("You will have 10 seconds to cancel this action before the system begins")
         time.sleep(10)
-        call("pip3 install aiohttp --upgrade ", shell=True)
-        call("pip3 install asyncio --upgrade ", shell=True)
-        call("pip3 install bs4 --upgrade ", shell=True)
-        call("pip3 install dnspython --upgrade ", shell=True)
-        call("pip3 install tqdm --upgrade ", shell=True)
-        call("pip3 install datetime --upgrade ", shell=True)
-        call("pip3 install requests --upgrade ", shell=True)
-        call("pip3 install socksipy-branch --upgrade ", shell=True)
-        call("pip3 install httplib2 --upgrade ", shell=True)
-        call("pip3 install aio_ping --upgrade ", shell=True)
-        call("pip3 install zipfile --upgrade", shell=True)
-        call("pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U", shell=True)
-        pass
+        call("pip3 install termcolor --upgrade --user ", shell=True)
+        call("pip3 install aiohttp --upgrade --user ", shell=True)
+        call("pip3 install asyncio --upgrade --user", shell=True)
+        call("pip3 install bs4 --upgrade --user", shell=True)
+        call("pip3 install dnspython --upgrade --user", shell=True)
+        call("pip3 install tqdm --upgrade --user", shell=True)
+        call("pip3 install datetime --upgrade --user", shell=True)
+        call("pip3 install requests --upgrade --user", shell=True)
+        call("pip3 install socksipy-branch --upgrade --user", shell=True)
+        call("pip3 install httplib2 --upgrade --user", shell=True)
+        call("pip3 install aio_ping --upgrade --user", shell=True)
+        call("pip3 install zipfile --upgrade --user", shell=True)
+        call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user", shell=True)
+        subprocess._cleanup()
     if chce == '3':
         exit()
 
@@ -106,7 +108,7 @@ def logo():
     sql_list_counter()
     lfi_list_counter()
     print(R + "\n----------------------------------------------------------------")
-    print(" Release Date Feb 18th 2018    " + B + "        Author: NovaCygni       " + R + " ")
+    print(" Release Date Dec 25th 2018    " + B + "        Author: NovaCygni       " + R + " ")
     print("        Proxy Enabled " + G + " [", ProxyEnabled, "] " + R + "                               ")
     print("        Cache & Log Status " + B + " [", cachestatus, "] " + R + "           ")
     print(" " + O + "Please check the Misc Options for Donations Options, Thankyou " + R + "         ")
@@ -525,115 +527,87 @@ def injtest():
                         hits = '0'
                     if str("error in your SQL syntax") in hits:
                         print(hold_the_door + " is vulnerable --> MySQL Classic")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_fetch") in hits:
+                    if str("mysql_fetch") in hits:
                         print(hold_the_door + " is Vulnerable --> MiscError")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("num_rows") in hits:
+                    if str("num_rows") in hits:
                         print(hold_the_door + " is Vulnerable --> MiscError2")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ORA-01756") in hits:
+                    if str("ORA-01756") in hits:
                         print(hold_the_door + " is Vulnerable --> Oracle")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Executing Database Query") in hits:
+                    if str("Error Executing Database Query") in hits:
                         print(hold_the_door + " is Vulnerable --> JDBC_CFM")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("SQLServer JDBC Driver") in hits:
+                    if str("SQLServer JDBC Driver") in hits:
                         print(hold_the_door + " is Vulnerable --> JDBC_CFM2")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("OLE DB Provider for SQL Server") in hits:
+                    if str("OLE DB Provider for SQL Server") in hits:
                         print(hold_the_door + " is Vulnerable --> MSSQL_OLEdb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Unclosed quotation mark") in hits:
+                    if str("Unclosed quotation mark") in hits:
                         print(hold_the_door + " is Vulnerabe --> MSSQL_Uqm")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ODBC Microsoft Access Driver") in hits:
+                    if str("ODBC Microsoft Access Driver") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access_ODBC")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Microsoft JET Database") in hits:
+                    if str("Microsoft JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access_JETdb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Occurred While Processing Request") in hits:
+                    if str("Error Occurred While Processing Request") in hits:
                         print(hold_the_door + " is Vulnerable --> Processing Request")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Microsoft JET Database") in hits:
+                    if str("Microsoft JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> MS-Access JetDb")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Error Occurred While Processing Request") in hits:
+                    if str("Error Occurred While Processing Request") in hits:
                         print(hold_the_door + " is Vulnerable --> Processing Request ")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Server Error") in hits:
+                    if str("Server Error") in hits:
                         print(hold_the_door + " is Vulnerable --> Server Error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ODBC Drivers error") in hits:
+                    if str("ODBC Drivers error") in hits:
                         print(hold_the_door + " is Vulnerable --> ODBC Drivers error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Invalid Querystring") in hits:
+                    if str("Invalid Querystring") in hits:
                         print(hold_the_door + " is Vulnerable --> Invalid Querystring")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("OLE DB Provider for ODBC") in hits:
+                    if str("OLE DB Provider for ODBC") in hits:
                         print(hold_the_door + " is Vulnerable --> OLE DB Provider for ODBC")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("VBScript Runtime") in hits:
+                    if str("VBScript Runtime") in hits:
                         print(hold_the_door + " is Vulnerable --> VBScript Runtime")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ADODB.Field") in hits:
+                    if str("ADODB.Field") in hits:
                         print(hold_the_door + " is Vulnerable --> ADODB.Field")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("BOF or EOF") in hits:
+                    if str("BOF or EOF") in hits:
                         print(hold_the_door + " is Vulnerable --> BOF or EOF")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("ADODB.Command") in hits:
+                    if str("ADODB.Command") in hits:
                         print(hold_the_door + " is Vulnerable --> ADODB.Command")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("JET Database") in hits:
+                    if str("JET Database") in hits:
                         print(hold_the_door + " is Vulnerable --> JET Database")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_fetch_array") in hits:
+                    if str("mysql_fetch_array") in hits:
                         print(hold_the_door + " is Vulnerabe --> mysql_fetch_array")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Syntax error") in hits:
+                    if str("Syntax error") in hits:
                         print(hold_the_door + " is Vulnerable --> Syntax error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("mysql_numrows()") in hits:
+                    if str("mysql_numrows()") in hits:
                         print(hold_the_door + " is Vulnerable --> mysql_numrows()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("GetArray()") in hits:
+                    if str("GetArray()") in hits:
                         print(hold_the_door + " is Vulnerable --> GetArray()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("FetchRow()") in hits:
+                    if str("FetchRow()") in hits:
                         print(hold_the_door + " is Vulnerable --> FetchRow()")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
-                    elif str("Input string was not in a correct format") in hits:
+                    if str("Input string was not in a correct format") in hits:
                         print(hold_the_door + " is Vulnerable --> Input String Error")
-                        sql_list_count += 1
                         sqli_confirmed.write("\n" + hold_the_door)
                     else:
                         pass
@@ -800,7 +774,7 @@ def fscan():
             i += 1
     numthreads = input('\nEnter no. of threads, Between 50 and 500: ')
     pages_pulled_as_one = input('Enter no. of Search Engine Pages to be scanned per d0rk,  \n'
-                                ' Between 25 and 100, increments of 25. Ie> 20:50:75:100   : ')
+                                ' Between 25 and 100, increments of 25. Ie> 25:50:75:100   : ')
     print("\nNumber of SQL errors :", "26")
     print("LFI payloads    :", len(lfis))
     print("XSS payloads    :", len(xsses))
@@ -808,7 +782,6 @@ def fscan():
     print("Threads         :", numthreads)
     print("Dorks           :", len(loaded_Dorks))
     print("Pages           :", pages_pulled_as_one)
-    print("Timeout         :", timeout)
     time.sleep(6)
     loop = asyncio.get_event_loop()
     usearch = loop.run_until_complete(search(pages_pulled_as_one))
@@ -830,7 +803,7 @@ def cloud():
         scandepth = "--dept normal"
     elif depth == 3:
         scandepth = "--dept full"
-    cloud = subprocess.Popen('python3.6 ' + pwd + "/cloudbuster.py " + str(target_site) + scandepth, shell=True)
+    cloud = subprocess.Popen('python3 ' + pwd + "/cloudbuster.py " + str(target_site) + scandepth, shell=True)
     cloud.communicate()
     subprocess._cleanup()
     print("Cloud Resolving Finished")
@@ -997,7 +970,7 @@ async def search(pages_pulled_as_one):
                 domains = set()
                 for name in names:
                     basename = re.search(r"(?<=(://))[^/]*(?=/)", name)
-                    if (basename is None) or any([x.strip().lower() in name for x in search_Ignore.splitlines(keepends=True)]):
+                    if (basename is None) or re.search("google",name) or re.search("facebook",name) or re.search("twitter",name) or re.search("gov",name) or re.search("fbi",name) or re.search("javascript",name) or re.search("stackoverflow",name) or re.search("microsoft",name) or re.search("24img.com",name) or re.search("v3n0m",name) or re.search("venom",name) or re.search("evilzone",name) or re.search("iranhackers",name) or re.search("pastebin",name) or re.search("charity",name) or re.search("school",name) or re.search("learning",name):
                         basename = re.search(r"(?<=://).*", name)
                     if basename is not None:
                         basename = basename.group(0)
@@ -1037,9 +1010,10 @@ async def search(pages_pulled_as_one):
         try:
             host = url.split("/", 3)
             domain = host[2]
-            if domain not in tmplist and "=" in url:
-                finallist.append(url)
-                tmplist.append(domain)
+            for site in sitearray:
+                if domain not in tmplist and "=" in url and site in url:
+                    finallist.append(url)
+                    tmplist.append(domain)
         except KeyboardInterrupt:
             os.system('clear')
             chce1 = input(':')
@@ -1089,7 +1063,7 @@ def fmenu():
         afsite = input("Enter the site eg target.com: ")
         print(B)
         pwd = os.path.dirname(str(os.path.realpath(__file__)))
-        findadmin = subprocess.Popen('python3.6 ' + pwd + "/modules/adminfinder.py -w lists/adminlist.txt -u " + str(afsite),
+        findadmin = subprocess.Popen('python3 ' + pwd + "/modules/adminfinder.py -w lists/adminlist.txt -u " + str(afsite),
                                      shell=True)
         findadmin.communicate()
         subprocess._cleanup()
@@ -1097,10 +1071,7 @@ def fmenu():
     elif chce == '3':
         import time
         print(B)
-        pwd = os.path.dirname(str(os.path.realpath(__file__)))
-        ftpcrawl = subprocess.Popen('python3.6 ' + pwd + "/modules/toxin.py -i " , shell=True)
-        ftpcrawl.communicate()
-        subprocess._cleanup()
+        toxin.menu()
     elif chce == '4':
         target_site = input("Enter the site eg target.com: ")
         print("[1] Normal Scan suitable for average sites")
@@ -1114,7 +1085,7 @@ def fmenu():
         print(B)
         pwd = os.path.dirname(str(os.path.realpath(__file__)))
         dnsbrute = subprocess.Popen(
-            'python3.6 ' + pwd + "/modules/dnsbrute.py -w lists/subdomains -u " + str(target_site) + att + " -t 200"
+            'python3 ' + pwd + "/modules/dnsbrute.py -w lists/subdomains -u " + str(target_site) + att + " -t 200"
             , shell=True)
         dnsbrute.communicate()
         subprocess._cleanup()
@@ -1142,6 +1113,7 @@ def fmenu():
         print("[4] Flush Cache and Delete Logs *Warning will erase Toxin Logs/Saves aswell* ")
         print("[5] Perform forced update of ALL installed Python packages and dependancies on system")
         print("[6] Donations information")
+        print("[7] Start SQLmap *GUI MODE ONLY*")
         print("[0] Return to main menu")
         chce2 = input(":")
         if chce2 == '1':
@@ -1150,7 +1122,7 @@ def fmenu():
             injtest()
         elif chce2 == '2':
             path = os.path.dirname(str(os.path.realpath(__file__)))
-            lfisuite = subprocess.Popen('python3.6 ' + path + "/lfisuite.py ", shell=True)
+            lfisuite = subprocess.Popen('python3 ' + path + "/lfisuite.py ", shell=True)
             lfisuite.communicate()
             subprocess._cleanup()
         elif chce2 == '3':
@@ -1193,11 +1165,15 @@ def fmenu():
                 "This will install the missing modules and upgrade them to current versions then update your Python3.6 entirely")
             print("You will have 10 seconds to cancel this action before the system begins")
             time.sleep(10)
-            call("pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U",
+            call("pip3 freeze --local --user | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 install -U --user",
                  shell=True)
+            subprocess._cleanup()
             pass
         elif chce2 == '6':
             donations()
+        elif chce2 == '7':
+            from subprocess import call
+            call("sudo sqlmap --wizard", shell=True)
         elif chce2 == '0':
             fmenu()
 

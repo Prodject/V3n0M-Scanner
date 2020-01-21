@@ -17,11 +17,6 @@ try:
     from os import getpid, kill, path
     from sys import argv, stdout
     from random import randint
-    from aiohttp import web
-    from aio_ping import Ping,VerbosePing
-    import async_timeout
-    import inspect
-    from functools import wraps
 
 except:
     exit()
@@ -46,7 +41,7 @@ def banner():
         .---..----..-..-..-..-..-.
         `| |'| || | >  < | || .` |
          `-' `----''-'`-``-'`-'`-'
-           V3n0M Metasploitable Scanner Version 0.1.2
+           V3n0M Metasploitable Scanner Version 0.1.3
 
     ''')
 
@@ -190,7 +185,7 @@ def makeips(amount):
     log = "IPLogList.txt"
     logfile = open(log, "a")
     for t in IPList:
-        logfile.write("ftp://" + t + ":21" + "\n")
+        logfile.write(t + "\n")
     logfile.close()
     chce = input("Option: ")
     if chce == '1':
@@ -279,17 +274,35 @@ class CoroutineLimiter:
 
 # modified fetch function with semaphore, to reduce choking/bottlenecking
 async def fetch(url, session):
-    async with session.get(url) as response:
-        delay = response.headers.get("DELAY")
-        date = response.headers.get("DATE")
-        print("{}:{} with delay {}".format(date, response.url, delay))
-        return await response.read()
+    print(url)
+    try:
+        async with session.get(str(url)) as response:
+            return await response.read()
+    except aiohttp.client_exceptions.InvalidURL:
+        pass
+    except RuntimeError:
+        pass
 
 
 async def bound_fetch(sem, url, session):
 # Getter function with semaphore, to reduce choking/bottlenecking
     async with sem:
-        await fetch(url, session)
+        hold_door = []
+        hold_the_door = ""
+        hodor = url.rstrip('\n') #strip trailing line from ip
+        try:
+            hold_door = socket.gethostbyaddr(hodor) #convert ip to url
+        except socket.herror:
+            pass
+        try:
+            chakra = hold_door[0]
+            hold_the_door = str(chakra) #take the first slice, the "url address" from the gethostbyaddr output & Do as str
+        except IndexError:
+            pass
+        #print(hold_the_door) #debug message to check correct slice is being taken
+        await fetch(hold_the_door, session) #Will print the slice regardless
+        pass
+
 
 
 async def run(r):
@@ -302,15 +315,12 @@ async def run(r):
         # Try to pull 1 IP at a time and return it as a simple string.
         with open('IPLogList.txt') as cachedIPs:
             for line in cachedIPs:
-                # Debug printer to check if correct IPs are being generated and sent.
-                #print(line)
-                #todo WORK NEEDS TO BE DONE AT THIS POINT!
-                for i in range(r):
-                    # pass Semaphore and session to every GET request
-                    task = asyncio.ensure_future(bound_fetch(sem, line, session))
-                    tasks.append(task)
-        responses = await asyncio.gather(*tasks)
-        await responses
+                line.rstrip()
+                #print("Stripped Line Debug:" + line) #Stripped Line Debug:4.30.73.175 # Ok so at this stage the IP address is fine.
+                # pass Semaphore and session to every GET request
+                task = bound_fetch(sem, line, session)
+                tasks.append(task)
+    await asyncio.gather(*tasks)
 
 
 def menu():
@@ -319,6 +329,3 @@ def menu():
     amount = input("How many IP addresses do you want to scan: ")
     makeips(amount)
 
-
-while True:
-        menu()
